@@ -1,1 +1,2 @@
-# phour
+# Introducing Phour
+A programming language.
