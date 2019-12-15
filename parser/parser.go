@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"phour/ast"
 	"phour/lexer"
 	"phour/token"
@@ -12,11 +13,13 @@ type Parser struct {
 
 	curToken  token.Token // current token under examination
 	peekToken token.Token // look at the next token if curToken does not give us enough info
+
+	errors []string
 }
 
 // New to get us a new token for curToken and peekToken
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l}
+	p := &Parser{l: l, errors: []string{}}
 
 	p.nextToken()
 	p.nextToken()
@@ -82,10 +85,25 @@ func (p *Parser) peekTokenIs(t token.Type) bool {
 	return p.peekToken.Type == t
 }
 
+// this helper enforces the correctness of the order of tokens
+// by checking the type of the next token
 func (p *Parser) expectPeek(t token.Type) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
 		return true
 	}
+
+	p.peekError(t)
 	return false
+}
+
+// Errors method returns errors
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
+func (p *Parser) peekError(t token.Type) {
+	msg := fmt.Sprintf(`expected next token to be %s but got %s instead`, t, p.peekToken.Type)
+
+	p.errors = append(p.errors, msg)
 }
