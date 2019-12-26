@@ -193,7 +193,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 
 		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
-			t.Fatalf(`program.Statements[0] is not ast.ExpressionStatement.`, program.Statements[0])
+			t.Fatalf(`program.Statements[0] is not ast.ExpressionStatement.got=%d`, program.Statements[0])
 		}
 
 		exp, ok := stmt.Expression.(*ast.PrefixExpression)
@@ -202,7 +202,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 		}
 
 		if exp.Operator != tt.operator {
-			t.Fatalf(`exp.Operator is not '%s'. got=%s`, tt.operator, exp.operator)
+			t.Fatalf(`exp.Operator is not '%s'. got=%s`, tt.operator, exp.Operator)
 		}
 
 		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
