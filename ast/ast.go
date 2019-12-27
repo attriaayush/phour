@@ -190,3 +190,15 @@ func (pe *InfixExpression) String() string {
 
 	return out.String()
 }
+
+// Boolean .. Type declaration to handle Booleans
+type Boolean struct {
+	Token token.Token
+	Value bool
+}
+
+func (b *Boolean) expressionNode() {}
+
+// TokenLiteral ..
+func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
+func (b *Boolean) String() string       { return b.Token.Literal }
