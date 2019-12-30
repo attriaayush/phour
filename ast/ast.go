@@ -1,8 +1,10 @@
 package ast
 
-import "phour/token"
-
-import "bytes"
+import (
+	"bytes"
+	"phour/token"
+	"strings"
+)
 
 // Node represents each node for our AST which will get
 // represented by its's token literal
@@ -246,6 +248,35 @@ func (bs *BlockStatement) String() string {
 	for _, s := range bs.Statements {
 		out.WriteString(s.String())
 	}
+
+	return out.String()
+}
+
+// FunctionLiteral to support parsing of Functions
+type FunctionLiteral struct {
+	Token      token.Token
+	Parameters []*Identifier
+	Body       *BlockStatement
+}
+
+func (f1 *FunctionLiteral) expressionNode() {}
+
+// TokenLiteral ..
+func (f1 *FunctionLiteral) TokenLiteral() string { return f1.Token.Literal }
+func (f1 *FunctionLiteral) String() string {
+	var out bytes.Buffer
+
+	params := []string{}
+
+	for _, p := range f1.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString(f1.TokenLiteral())
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(")")
+	out.WriteString(f1.Body.String())
 
 	return out.String()
 }
